@@ -9,7 +9,7 @@ const RoomPage = () => {
     const [removeSocketId, setRemoveSocketId] = useState(null);
     const [myStream, setMyStream] = useState();
     const [remoteStream, setRemoteStream] = useState();
-    const [addedTracks, setAddedTracks] = useState(new Set());
+    
 
     const handleUserJoined = useCallback(({email, id}) => {
         console.log(`Email ${email} joined room`);
@@ -46,7 +46,7 @@ const RoomPage = () => {
         for (const track of myStream.getTracks()) {
             peer.peer.addTrack(track, myStream);
         }
-    }, [myStream, addedTracks]);
+    }, [myStream]);
 
     const handleCallAccepted = useCallback(
         ({ from, ans }) => {
@@ -63,6 +63,13 @@ const RoomPage = () => {
     }, 
     [removeSocketId, socket]);
 
+    useEffect(() => {
+        peer.peer.addEventListener('negotiationneeded', handleNegoNeeded);
+        return () => {
+            peer.peer.removeEventListener('negotiationneeded', handleNegoNeeded);
+        }
+    },    [handleNegoNeeded]);
+
     const handleNegoNeededIncomming = useCallback(
         async ({ from, offer }) => {
             const ans = await peer.getAnswer(offer);
@@ -71,17 +78,12 @@ const RoomPage = () => {
         [socket]
     );
 
-    const handleNegoNeededFinal = useCallback( async ({ ans, }) => {
+    const handleNegoNeededFinal = useCallback( async ({ ans }) => {
             await peer.setLocalDescription(ans);
         }, 
     []);
 
-    useEffect(() => {
-        peer.peer.addEventListener('negotiationneeded', handleNegoNeeded);
-        return () => {
-            peer.peer.removeEventListener('negotiationneeded', handleNegoNeeded);
-        }
-    },    [handleNegoNeeded]);
+    
 
     useEffect(() => {
         peer.peer.addEventListener('track', async ev => {
