@@ -10,7 +10,7 @@ export const useSocket = () => {
 
 export const SocketProvider = (props) => {
 
-    const socket = useMemo(() => io('https://animated-crumble-127a7b.netlify.app'), [])
+    const socket = useMemo(() => io('https://videochat-st9b.onrender.com'), [])
 
     return (
         <SocketContext.Provider value={socket}>
