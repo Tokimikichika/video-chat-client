@@ -10,7 +10,7 @@ export const useSocket = () => {
 
 export const SocketProvider = (props) => {
 
-    const socket = useMemo(() => io('localhost:8000'), [])
+    const socket = useMemo(() => io('https://animated-crumble-127a7b.netlify.app'), [])
 
     return (
         <SocketContext.Provider value={socket}>
