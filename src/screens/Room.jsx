@@ -24,7 +24,7 @@ const RoomPage = () => {
         }); 
         const offer = await peer.getOffer();
         socket.emit("user:call", {to: removeSocketId, offer});
-        setMyStream(myStream);
+        setMyStream(stream);
     }, [removeSocketId, socket]);
 
     const handleInCommingCall = useCallback(
@@ -34,7 +34,7 @@ const RoomPage = () => {
                 audio: true,
                 video: true,
             });
-            setMyStream(myStream);
+            setMyStream(stream);
             console.log(`Incoming Call`, from, offer);
             const ans = await peer.getAnswer(offer);
             socket.emit('call:accepted', { to: from, ans });
@@ -44,14 +44,7 @@ const RoomPage = () => {
 
     const sendStreams = useCallback(() => {
         for (const track of myStream.getTracks()) {
-            if (!addedTracks.has(track.id) && !peer.peer.getSenders().some(sender => sender.track === track)) {
-                console.log('Adding track:', track);
-                const sender = peer.peer.addTrack(track, myStream);
-                console.log('Sender added:', sender);
-                setAddedTracks(new Set([...addedTracks, track.id]));
-            } else {
-                console.log('Skipped track:', track);
-            }
+            peer.peer.addTrack(track, myStream);
         }
     }, [myStream, addedTracks]);
 
