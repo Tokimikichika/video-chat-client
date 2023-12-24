@@ -21,7 +21,7 @@ const LobbyScreen = () => {
 
     const handleJoinRoom = useCallback(
         (data) => {
-            const { email, room } = data;
+            const { room } = data;
             navigate(`/room/${room}`);
         }, 
     [navigate]
