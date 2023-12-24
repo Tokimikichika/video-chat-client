@@ -44,7 +44,7 @@ const RoomPage = () => {
 
     const sendStreams = useCallback(() => {
         for (const track of myStream.getTracks()) {
-            if (!addedTracks.has(track.id)) {
+            if (!addedTracks.has(track.id) && !peer.peer.getSenders().some(sender => sender.track === track)) {
                 peer.peer.addTrack(track, myStream);
                 setAddedTracks(new Set([...addedTracks, track.id]));
             }
@@ -90,7 +90,7 @@ const RoomPage = () => {
         peer.peer.addEventListener('track', async ev => {
             const remoteStream = ev.streams;
             console.log('Got Tracks');
-            setRemoteStream(remoteStream);
+            setRemoteStream(remoteStream[0]);
         });
 
     }, []);
