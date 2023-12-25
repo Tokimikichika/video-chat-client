@@ -45,12 +45,19 @@ const RoomPage = () => {
         const senders = peer.peer.getSenders();
         const tracks = myStream.getTracks();
     
+        if (tracks.length === 0) {
+            console.log("No tracks to send");
+            return;
+        }
+    
         tracks.forEach(track => {
             const existingSender = senders.find(sender => sender.track === track);
             if (!existingSender) {
                 peer.peer.addTrack(track, myStream);
             }
         });
+    
+        console.log("Streams sent successfully");
     }, [myStream]);
 
     const handleCallAccepted = useCallback(
