@@ -133,7 +133,7 @@ const RoomPage = () => {
     <div>
         <h1>Room Page</h1>
         <h4>{removeSocketId ? 'Connected' : 'No one in room'}</h4>
-        { myStream && <button onClick={sendStreams}>Send Stream</button> }
+        { <button onClick={sendStreams}>Send Stream</button> }
         { removeSocketId && <button onClick={handleCallUser}>CALL</button>}
         {myStream && (
             <>
