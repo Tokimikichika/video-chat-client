@@ -43,14 +43,7 @@ const RoomPage = () => {
 
     const sendStreams = useCallback(() => {
         for (const track of myStream.getTracks()) {
-            if (!addedTracks.has(track.id) && !peer.peer.getSenders().some(sender => sender.track === track)) {
-                console.log('Adding track:', track);
-                const sender = peer.peer.addTrack(track, myStream);
-                console.log('Sender added:', sender);
-                setAddedTracks(new Set([...addedTracks, track.id]));
-            } else {
-                console.log('Skipped track:', track);
-            }
+            peer.peer.addTrack(track, myStream);
         }
     }, [myStream]);
 
